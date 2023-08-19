@@ -1,5 +1,5 @@
 from stable_baselines3 import PPO, DQN, A2C
-from custom_env import Ex1EnvWrapper
+from custom_env import CustomSokoban1
 import argparse
 import os
 
@@ -9,7 +9,7 @@ LOG_DIR = "logs"
 if not os.path.exists(LOG_DIR):
         os.makedirs(LOG_DIR)
 
-env = Ex1EnvWrapper()
+env = CustomSokoban1()
 env.reset()
 
 models = {"PPO": PPO("MlpPolicy", env, device='cuda', verbose=1, tensorboard_log=LOG_DIR),

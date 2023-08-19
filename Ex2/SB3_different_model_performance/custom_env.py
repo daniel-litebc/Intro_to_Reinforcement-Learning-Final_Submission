@@ -1,7 +1,7 @@
 import random
 from utils.soko_pap import *
 
-class Ex1EnvWrapper(PushAndPullSokobanEnv):
+class CustomSokoban1(PushAndPullSokobanEnv):
     def __init__(self, dim_room=(7,7), num_boxes=1, max_steps=500):
         super().__init__(dim_room=dim_room, num_boxes=num_boxes, max_steps=max_steps)
 
