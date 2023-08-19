@@ -12,7 +12,7 @@ class CustomSokoban2(PushAndPullSokobanEnv):
         obs = super().reset()
         
         self.current_room_state = self.room_state.copy()
-        self.distances = self._get_distances(self.current_room_state)
+        self.distances = self.get_distances(self.current_room_state)
         
         return obs
 
@@ -22,7 +22,7 @@ class CustomSokoban2(PushAndPullSokobanEnv):
         self.next_room_state = self.room_state.copy()
 
         if not done:
-            reward += self._box2target_change_reward(self.current_room_state, self.next_room_state, self.distances)
+            reward += self.reward_shaping(self.current_room_state, self.next_room_state, self.distances)
 
         self.current_room_state = self.next_room_state.copy()
 
@@ -58,22 +58,22 @@ class CustomSokoban2(PushAndPullSokobanEnv):
         return reward_b2t + reward_b2m + reward_adj_push
 
 
-    def get_positions(self, room_state, distances):
+    def get_positions(self, room_state):
         box_position = tuple(np.argwhere(room_state == 4).ravel())
         monster_position = tuple(np.argwhere(room_state == 5).ravel())
 
         return box_position, monster_position
 
 
-    def get_box_to_monster_distance(box_position, monster_position):
+    def get_box_to_monster_distance(self, box_position, monster_position):
         return np.sum((np.array(monster_position) - np.array(box_position))**2)
 
 
-    def get_box_to_target_distance(box_position, distances_to_target):
+    def get_box_to_target_distance(self, box_position, distances_to_target):
         return distances_to_target[box_position]
 
 
-    def get_distances(room_state):
+    def get_distances(self, room_state):
         target = np.where(room_state == 2)
         if target[0].size == 0:
             return None
